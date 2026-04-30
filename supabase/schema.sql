@@ -79,3 +79,95 @@ create policy "Service role can read mechanic signups"
   on mechanic_signups for select
   to service_role
   using (true);
+
+
+-- Auto parts catalog (source of truth for parts search).
+create table if not exists auto_parts (
+  id uuid primary key default gen_random_uuid(),
+  part_name text not null,
+  part_number text,
+  category text,
+  make text,
+  model text,
+  year_start int,
+  year_end int,
+  price numeric,
+  condition text,
+  mileage int,
+  warranty text,
+  description text,
+  metadata jsonb default '{}',
+  created_at timestamptz not null default now()
+);
+
+alter table auto_parts enable row level security;
+
+create policy "Anyone can read auto parts"
+  on auto_parts for select
+  to anon, authenticated
+  using (true);
+
+create policy "Service role can manage auto parts"
+  on auto_parts for all
+  to service_role
+  using (true);
+
+-- Full-text search index on auto_parts.
+create index if not exists auto_parts_fts_idx
+  on auto_parts
+  using gin (to_tsvector('english', part_name || ' ' || coalesce(description, '') || ' ' || coalesce(make, '') || ' ' || coalesce(model, '')));
+
+
+-- Conversations (persisted for authenticated users only).
+create table if not exists conversations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users not null,
+  title text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table conversations enable row level security;
+
+create policy "Users can read own conversations"
+  on conversations for select
+  to authenticated
+  using (user_id = auth.uid());
+
+create policy "Users can insert own conversations"
+  on conversations for insert
+  to authenticated
+  with check (user_id = auth.uid());
+
+create policy "Users can update own conversations"
+  on conversations for update
+  to authenticated
+  using (user_id = auth.uid());
+
+create policy "Users can delete own conversations"
+  on conversations for delete
+  to authenticated
+  using (user_id = auth.uid());
+
+
+-- Messages within conversations.
+create table if not exists messages (
+  id uuid primary key default gen_random_uuid(),
+  conversation_id uuid references conversations on delete cascade not null,
+  role text not null,
+  content text not null,
+  metadata jsonb default '{}',
+  created_at timestamptz not null default now()
+);
+
+alter table messages enable row level security;
+
+create policy "Users can read own messages"
+  on messages for select
+  to authenticated
+  using (conversation_id in (select id from conversations where user_id = auth.uid()));
+
+create policy "Users can insert own messages"
+  on messages for insert
+  to authenticated
+  with check (conversation_id in (select id from conversations where user_id = auth.uid()));
