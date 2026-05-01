@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,36 +9,76 @@ import {
   Car,
   Truck,
   Anchor,
-  Settings,
-  User,
   X,
   Menu,
   Clock,
   Warehouse,
+  LogIn,
+  LogOut,
 } from "lucide-react";
 import clsx from "clsx";
+import { useAuth } from "@/components/AuthProvider";
+import { getSupabase } from "@/lib/supabase";
 
-const pastConversations = [
-  { id: "1", title: "5.3 Silverado engine", time: "2h ago" },
-  { id: "2", title: "F-150 transmission", time: "Yesterday" },
-  { id: "3", title: "Cummins diesel search", time: "2 days ago" },
-  { id: "4", title: "Mercruiser outboard quote", time: "3 days ago" },
-  { id: "5", title: "Ram 1500 transfer case", time: "4 days ago" },
-  { id: "6", title: "Peterbilt 379 head", time: "1 week ago" },
-  { id: "7", title: "6.7 Powerstroke rebuild", time: "1 week ago" },
-  { id: "8", title: "Duramax LML engine swap", time: "2 weeks ago" },
-];
+type ConversationItem = {
+  id: string;
+  title: string | null;
+  updated_at: string;
+};
+
+function relativeTime(dateStr: string): string {
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diff = now - then;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "Yesterday";
+  if (days < 7) return `${days} days ago`;
+  const weeks = Math.floor(days / 7);
+  if (weeks === 1) return "1 week ago";
+  return `${weeks} weeks ago`;
+}
 
 const categories = [
-  { href: "/", icon: Car, label: "Cars" },
-  { href: "/", icon: Truck, label: "Trucks" },
-  { href: "/", icon: Anchor, label: "Marine" },
-  { href: "/", icon: Wrench, label: "Commercial Parts" },
+  { href: "/cars", icon: Car, label: "Cars" },
+  { href: "/trucks", icon: Truck, label: "Trucks" },
+  { href: "/marine", icon: Anchor, label: "Marine" },
+  { href: "/commercial-parts", icon: Wrench, label: "Commercial Parts" },
 ];
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { user, loading, signOut } = useAuth();
+  const [conversations, setConversations] = useState<ConversationItem[]>([]);
+
+  useEffect(() => {
+    if (!user) {
+      setConversations([]);
+      return;
+    }
+
+    function loadConversations() {
+      const supabase = getSupabase();
+      supabase
+        .from("conversations")
+        .select("id, title, updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(20)
+        .then(({ data }) => {
+          if (data) setConversations(data);
+        });
+    }
+
+    loadConversations();
+
+    window.addEventListener("conversation-created", loadConversations);
+    return () => window.removeEventListener("conversation-created", loadConversations);
+  }, [user]);
 
   const isAdminOrDash =
     pathname.startsWith("/admin") ||
@@ -123,7 +163,20 @@ export default function Sidebar() {
             Recent
           </p>
           <div className="space-y-0.5">
-            {pastConversations.map((chat) => (
+            {!loading && !user && (
+              <p className="text-xs text-text-tertiary px-2 py-3">
+                <Link href="/auth/login" className="text-orange-DEFAULT hover:underline">
+                  Sign in
+                </Link>{" "}
+                to save your conversations
+              </p>
+            )}
+            {!loading && user && conversations.length === 0 && (
+              <p className="text-xs text-text-tertiary px-2 py-3">
+                No conversations yet
+              </p>
+            )}
+            {conversations.map((chat) => (
               <Link
                 key={chat.id}
                 href={`/chat/${chat.id}`}
@@ -132,10 +185,10 @@ export default function Sidebar() {
               >
                 <Clock size={13} aria-hidden="true" className="text-text-secondary flex-shrink-0" />
                 <span className="text-sm text-text-secondary group-hover:text-text-primary truncate transition-colors duration-200">
-                  {chat.title}
+                  {chat.title || "Untitled"}
                 </span>
                 <span className="ml-auto text-[11px] text-text-secondary/60 flex-shrink-0">
-                  {chat.time}
+                  {relativeTime(chat.updated_at)}
                 </span>
               </Link>
             ))}
@@ -200,19 +253,33 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* User profile */}
+        {/* User profile / auth */}
         <div className="px-3 py-4 border-t border-line">
-          <button
-            type="button"
-            aria-label="Open account settings"
-            className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-elevated transition-colors w-full text-left"
-          >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-DEFAULT/40 to-orange-DEFAULT/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-              <User size={14} className="text-orange-DEFAULT" />
-            </div>
-            <span className="text-sm text-text-primary font-medium flex-1">Guest</span>
-            <Settings size={15} aria-hidden="true" className="text-text-secondary" />
-          </button>
+          {!loading && user ? (
+            <button
+              type="button"
+              onClick={signOut}
+              className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-elevated transition-colors w-full text-left"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-DEFAULT/40 to-orange-DEFAULT/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <LogOut size={14} className="text-orange-DEFAULT" />
+              </div>
+              <span className="text-sm text-text-primary font-medium flex-1 truncate">
+                {user.email}
+              </span>
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-elevated transition-colors w-full"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-DEFAULT/40 to-orange-DEFAULT/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <LogIn size={14} className="text-orange-DEFAULT" />
+              </div>
+              <span className="text-sm text-text-primary font-medium flex-1">Sign In</span>
+            </Link>
+          )}
         </div>
       </aside>
     </>

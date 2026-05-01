@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import StickyCallButton from "@/components/StickyCallButton";
+import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,19 +58,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-bg text-text-primary antialiased">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-orange-DEFAULT focus:text-white focus:text-sm focus:font-medium focus:outline-none"
-        >
-          Skip to content
-        </a>
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <main id="main-content" className="flex-1 overflow-y-auto relative">
-            {children}
-          </main>
-        </div>
-        <StickyCallButton />
+        <AuthProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-orange-DEFAULT focus:text-white focus:text-sm focus:font-medium focus:outline-none"
+          >
+            Skip to content
+          </a>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <main id="main-content" className="flex-1 overflow-y-auto relative">
+              {children}
+            </main>
+          </div>
+          <StickyCallButton />
+        </AuthProvider>
       </body>
     </html>
   );

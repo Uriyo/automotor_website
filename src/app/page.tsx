@@ -59,25 +59,25 @@ const categoryCards = [
     icon: Car,
     title: "Cars",
     desc: "Used engines and transmissions for every make and model.",
-    href: "/",
+    href: "/cars",
   },
   {
     icon: Truck,
     title: "Trucks",
     desc: "F-150, Silverado, Ram, Duramax, Cummins, Powerstroke. We've got it.",
-    href: "/",
+    href: "/trucks",
   },
   {
     icon: Anchor,
     title: "Marine",
     desc: "Mercruiser, Volvo Penta, Yamaha, OMC. Dock-to-dock delivery.",
-    href: "/",
+    href: "/marine",
   },
   {
     icon: Wrench,
     title: "Commercial",
     desc: "Peterbilt, Kenworth, Freightliner. Fleet-ready parts.",
-    href: "/",
+    href: "/commercial-parts",
   },
 ];
 
@@ -121,12 +121,10 @@ const footerCols: { title: string; links: { label: string; href: string }[] }[] 
   {
     title: "Categories",
     links: [
-      { label: "Cars", href: "#" },
-      { label: "Trucks", href: "#" },
-      { label: "Marine", href: "#" },
-      { label: "Commercial", href: "#" },
-      { label: "Diesel", href: "#" },
-      { label: "Performance", href: "#" },
+      { label: "Cars", href: "/cars" },
+      { label: "Trucks", href: "/trucks" },
+      { label: "Marine", href: "/marine" },
+      { label: "Commercial", href: "/commercial-parts" },
     ],
   },
   {

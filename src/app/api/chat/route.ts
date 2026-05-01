@@ -46,8 +46,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const cookieHeader = request.headers.get("cookie") || "";
-  const user = await getCurrentUser(cookieHeader);
+  const user = await getCurrentUser(request);
 
   let history: LLMMessage[] = [];
   if (user && conversationId) {

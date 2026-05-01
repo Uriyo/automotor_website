@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Wrench, MoreHorizontal } from "lucide-react";
 import ChatInput from "@/components/ChatInput";
 import type { ImageAttachment } from "@/components/ChatInput";
+import { getSupabase } from "@/lib/supabase";
 
 type MessageType = {
   role: "user" | "assistant";
@@ -61,9 +62,21 @@ export default function ChatPage() {
         payload.image = { data: image.data, mimeType: image.mimeType };
       }
 
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      // Attach auth token so the API can identify the user and persist the conversation
+      const supabase = getSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
@@ -84,6 +97,7 @@ export default function ChatPage() {
       const newConvId = res.headers.get("X-Conversation-Id");
       if (newConvId && !conversationId) {
         setConversationId(newConvId);
+        window.dispatchEvent(new Event("conversation-created"));
       }
 
       const reader = res.body?.getReader();
