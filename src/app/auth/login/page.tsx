@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Wrench } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
+import { LogoLockup } from "@/components/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,11 +37,8 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
       <div className="w-full max-w-sm">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <Wrench size={18} className="text-orange-DEFAULT" />
-          <span className="font-semibold text-text-primary text-lg tracking-tight">
-            AutoMotor.AI
-          </span>
+        <div className="flex items-center justify-center mb-8">
+          <LogoLockup size={32} textClassName="text-xl" />
         </div>
 
         <div className="bg-panel border border-line rounded-2xl p-6">

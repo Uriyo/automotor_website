@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wrench, Menu, X, LayoutDashboard, Inbox, Phone, Building2, CreditCard, Scale, Bot, TrendingUp, DollarSign, AlertTriangle, Settings } from "lucide-react";
 import { useState } from "react";
+import { LogoMark } from "@/components/Logo";
 import clsx from "clsx";
 
 const nav = [
@@ -34,9 +35,11 @@ export default function AdminSidebar() {
       <aside aria-label="Admin navigation" className={clsx("fixed lg:relative z-50 lg:z-auto w-[240px] h-full flex-shrink-0 bg-panel border-r border-line flex flex-col transition-transform lg:translate-x-0", open ? "translate-x-0" : "-translate-x-full")}>
         <button aria-label="Close menu" onClick={() => setOpen(false)} className="lg:hidden absolute top-4 right-4 text-text-secondary hover:text-text-primary"><X size={18} /></button>
         <div className="px-5 pt-5 pb-3">
-          <div className="flex items-center gap-2">
-            <Wrench size={14} className="text-orange-DEFAULT" />
-            <span className="font-semibold text-sm text-text-primary tracking-tight">AutoMotor Admin</span>
+          <div className="flex items-center gap-2.5">
+            <LogoMark size={24} className="text-text-primary" />
+            <span className="font-semibold text-base text-text-primary tracking-tight leading-none">
+              AutoMotor<span className="text-orange-DEFAULT">.</span>AI <span className="text-text-tertiary font-normal text-xs">Admin</span>
+            </span>
           </div>
         </div>
         <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">

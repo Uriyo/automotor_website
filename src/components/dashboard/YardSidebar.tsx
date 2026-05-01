@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Wrench, LogOut, Menu, X, LayoutDashboard, Inbox, Phone, Package, Star, DollarSign, Users, Settings, BookOpen } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
+import { LogoMark } from "@/components/Logo";
 
 const nav = [
   { href: "/yards/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -43,9 +44,11 @@ export default function YardSidebar() {
           <X size={18} />
         </button>
         <div className="px-5 pt-6 pb-3">
-          <div className="flex items-center gap-2 mb-0.5">
-            <Wrench size={16} className="text-orange-DEFAULT" />
-            <span className="font-semibold text-sm text-text-primary tracking-tight">AutoMotor for Yards</span>
+          <div className="flex items-center gap-2.5 mb-0.5">
+            <LogoMark size={24} className="text-text-primary" />
+            <span className="font-semibold text-base text-text-primary tracking-tight leading-none">
+              AutoMotor<span className="text-orange-DEFAULT">.</span>AI <span className="text-text-tertiary font-normal text-xs">Yards</span>
+            </span>
           </div>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-sm font-semibold text-text-primary">Tommy&apos;s Auto Salvage</span>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { X, Download, Copy, Check, MessageSquare, Smartphone, Music, Instagram, Twitter, Facebook, Wrench } from "lucide-react";
+import { X, Download, Copy, Check, MessageSquare, Smartphone, Music, Instagram, Twitter, Facebook } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { LogoMark } from "@/components/Logo";
 
 interface SavingsReceiptProps {
   savings: number;
@@ -80,8 +81,8 @@ export default function SavingsReceiptModal({
               <p className="text-sm text-text-secondary">using <span className="text-orange-DEFAULT font-semibold">AutoMotor.AI</span>.</p>
               <p className="text-sm text-text-secondary">in {secondsElapsed} seconds.</p>
             </div>
-            <div className="w-10 h-10 bg-orange-DEFAULT/10 rounded-lg flex items-center justify-center">
-              <Wrench size={18} className="text-orange-DEFAULT" aria-hidden="true" />
+            <div className="w-12 h-12 bg-elevated border border-line rounded-lg flex items-center justify-center">
+              <LogoMark size={28} className="text-text-primary" />
             </div>
           </div>
           <div className="flex items-center justify-between mt-2">

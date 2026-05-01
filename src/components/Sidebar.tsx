@@ -20,6 +20,7 @@ import {
 import clsx from "clsx";
 import { useAuth } from "@/components/AuthProvider";
 import { getSupabase } from "@/lib/supabase";
+import { LogoLockup } from "@/components/Logo";
 
 type ConversationItem = {
   id: string;
@@ -161,11 +162,8 @@ export default function Sidebar() {
 
         {/* Logo */}
         <div className="px-5 pt-5 pb-4">
-          <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-            <Wrench size={14} className="text-orange-DEFAULT" />
-            <span className="font-semibold text-text-primary text-sm tracking-tight">
-              AutoMotor.AI
-            </span>
+          <Link href="/" onClick={() => setMobileOpen(false)} aria-label="AutoMotor.AI home">
+            <LogoLockup size={24} textClassName="text-base" />
           </Link>
         </div>
 

@@ -18,6 +18,7 @@ import {
   Warehouse,
 } from "lucide-react";
 import ChatInput from "@/components/ChatInput";
+import { LogoLockup, LogoMark } from "@/components/Logo";
 
 const suggestionChips = [
   "My truck won't start",
@@ -157,10 +158,9 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Top nav */}
       <nav className="flex items-center justify-between px-6 py-4 lg:px-8 border-b border-line">
-        <div className="flex items-center gap-2">
-          <Wrench size={16} className="text-orange-DEFAULT" aria-hidden="true" />
-          <span className="font-semibold text-text-primary text-sm tracking-tight">AutoMotor.AI</span>
-        </div>
+        <Link href="/" aria-label="AutoMotor.AI home">
+          <LogoLockup size={28} textClassName="text-base" />
+        </Link>
         <div className="flex items-center gap-2">
           <button className="text-sm text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5">
             Sign in
@@ -410,10 +410,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-2 mb-3">
-                <Wrench size={14} className="text-orange-DEFAULT" aria-hidden="true" />
-                <span className="font-semibold text-text-primary text-sm tracking-tight">AutoMotor.AI</span>
-              </div>
+              <LogoLockup size={24} textClassName="text-base" className="mb-3" />
               <p className="text-xs text-text-secondary leading-relaxed max-w-[180px]">
                 The fastest way to source used engines and transmissions.
               </p>

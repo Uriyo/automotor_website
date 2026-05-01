@@ -21,23 +21,24 @@ export default async function OpenGraphImage() {
         }}
       >
         {/* Top bar — brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div
-            style={{
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "rgba(234, 88, 12, 0.15)",
-              borderRadius: "8px",
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA580C" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-            </svg>
-          </div>
-          <span style={{ fontSize: "22px", fontWeight: 600, letterSpacing: "-0.01em" }}>AutoMotor.AI</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <svg width="56" height="56" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.65 24.35 A11 11 0 1 1 22.35 24.35" stroke="#FAFAFA" strokeWidth="2" strokeLinecap="round" />
+            <line x1="7.0" y1="21.5" x2="8.4" y2="20.5" stroke="#FAFAFA" strokeWidth="1.5" strokeLinecap="round" opacity="0.30" />
+            <line x1="5.5" y1="17.0" x2="7.1" y2="16.6" stroke="#FAFAFA" strokeWidth="1.5" strokeLinecap="round" opacity="0.40" />
+            <line x1="7.0" y1="10.5" x2="8.4" y2="11.5" stroke="#FAFAFA" strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
+            <line x1="11.5" y1="6.5" x2="12.5" y2="7.9" stroke="#FAFAFA" strokeWidth="1.5" strokeLinecap="round" opacity="0.70" />
+            <line x1="17.0" y1="5.5" x2="17.0" y2="7.2" stroke="#FAFAFA" strokeWidth="1.5" strokeLinecap="round" opacity="0.85" />
+            <line x1="20.5" y1="6.5" x2="19.5" y2="7.9" stroke="#EA580C" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+            <line x1="24.0" y1="9.0" x2="22.7" y2="10.0" stroke="#EA580C" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+            <path d="M25.4 11.7 A11 11 0 0 1 26.5 16" stroke="#EA580C" strokeWidth="2.4" strokeLinecap="round" />
+            <line x1="16" y1="16" x2="22.5" y2="9.5" stroke="#EA580C" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="16" cy="16" r="2.6" fill="#FAFAFA" />
+            <circle cx="16" cy="16" r="1" fill="#09090B" />
+          </svg>
+          <span style={{ fontSize: "30px", fontWeight: 600, letterSpacing: "-0.01em" }}>
+            AutoMotor<span style={{ color: "#EA580C" }}>.</span>AI
+          </span>
         </div>
 
         {/* Headline */}
