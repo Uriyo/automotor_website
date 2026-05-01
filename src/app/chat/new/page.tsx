@@ -2,26 +2,18 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import ChatView from "@/components/ChatView";
 
-function NewChatRedirect() {
+function NewChat() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-
-  useEffect(() => {
-    const q = searchParams.get("q") || "";
-    const id = Date.now().toString();
-    router.replace(`/chat/${id}${q ? `?q=${encodeURIComponent(q)}` : ""}`);
-  }, [searchParams, router]);
-
-  return null;
+  const query = searchParams.get("q") || "";
+  return <ChatView initialQuery={query} />;
 }
 
 export default function NewChatPage() {
   return (
     <Suspense>
-      <NewChatRedirect />
+      <NewChat />
     </Suspense>
   );
 }

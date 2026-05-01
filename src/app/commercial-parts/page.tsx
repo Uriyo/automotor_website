@@ -1,3 +1,5 @@
+"use client";
+
 import { Wrench } from "lucide-react";
 import CategoryPage from "@/components/CategoryPage";
 

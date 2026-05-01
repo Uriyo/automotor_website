@@ -1,3 +1,5 @@
+"use client";
+
 import { Car } from "lucide-react";
 import CategoryPage from "@/components/CategoryPage";
 

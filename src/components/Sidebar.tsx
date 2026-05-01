@@ -15,6 +15,7 @@ import {
   Warehouse,
   LogIn,
   LogOut,
+  Trash2,
 } from "lucide-react";
 import clsx from "clsx";
 import { useAuth } from "@/components/AuthProvider";
@@ -62,16 +63,23 @@ export default function Sidebar() {
       return;
     }
 
-    function loadConversations() {
+    async function loadConversations() {
       const supabase = getSupabase();
-      supabase
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data, error } = await supabase
         .from("conversations")
         .select("id, title, updated_at")
+        .eq("user_id", user!.id)
         .order("updated_at", { ascending: false })
-        .limit(20)
-        .then(({ data }) => {
-          if (data) setConversations(data);
-        });
+        .limit(20);
+
+      if (error) {
+        console.error("Failed to load conversations:", error);
+        return;
+      }
+      if (data) setConversations(data);
     }
 
     loadConversations();
@@ -79,6 +87,22 @@ export default function Sidebar() {
     window.addEventListener("conversation-created", loadConversations);
     return () => window.removeEventListener("conversation-created", loadConversations);
   }, [user]);
+
+  async function deleteConversation(id: string) {
+    const supabase = getSupabase();
+    const { error } = await supabase
+      .from("conversations")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Failed to delete conversation:", error);
+      return;
+    }
+
+    setConversations((prev) => prev.filter((c) => c.id !== id));
+    window.dispatchEvent(new Event("conversation-created"));
+  }
 
   const isAdminOrDash =
     pathname.startsWith("/admin") ||
@@ -177,20 +201,35 @@ export default function Sidebar() {
               </p>
             )}
             {conversations.map((chat) => (
-              <Link
+              <div
                 key={chat.id}
-                href={`/chat/${chat.id}`}
-                onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-elevated group transition-colors duration-200"
               >
-                <Clock size={13} aria-hidden="true" className="text-text-secondary flex-shrink-0" />
-                <span className="text-sm text-text-secondary group-hover:text-text-primary truncate transition-colors duration-200">
-                  {chat.title || "Untitled"}
-                </span>
-                <span className="ml-auto text-[11px] text-text-secondary/60 flex-shrink-0">
-                  {relativeTime(chat.updated_at)}
-                </span>
-              </Link>
+                <Link
+                  href={`/chat/${chat.id}`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2.5 flex-1 min-w-0"
+                >
+                  <Clock size={13} aria-hidden="true" className="text-text-secondary flex-shrink-0" />
+                  <span className="text-sm text-text-secondary group-hover:text-text-primary truncate transition-colors duration-200">
+                    {chat.title || "Untitled"}
+                  </span>
+                  <span className="ml-auto text-[11px] text-text-secondary/60 flex-shrink-0">
+                    {relativeTime(chat.updated_at)}
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  aria-label="Delete conversation"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteConversation(chat.id);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 flex-shrink-0 w-6 h-6 flex items-center justify-center rounded text-text-tertiary hover:text-red-500 transition-all"
+                >
+                  <Trash2 size={12} />
+                </button>
+              </div>
             ))}
           </div>
 
