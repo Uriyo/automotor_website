@@ -7,6 +7,11 @@ import { ArrowLeft, Wrench, MoreHorizontal, Trash2 } from "lucide-react";
 import ChatInput from "@/components/ChatInput";
 import type { ImageAttachment } from "@/components/ChatInput";
 import { getSupabase } from "@/lib/supabase";
+import {
+  createConversation,
+  saveMessage,
+  bumpConversationUpdatedAt,
+} from "@/lib/conversations";
 
 type MessageType = {
   role: "user" | "assistant";
@@ -37,9 +42,14 @@ export default function ChatView({
   const bottomRef = useRef<HTMLDivElement>(null);
   const initRef = useRef(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  // Tracks conversation IDs that were created in *this* component instance.
+  // We must NOT re-run the history loader for these — the local optimistic
+  // state (the in-flight streaming assistant message) is the source of truth.
+  const localCreatedIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (!existingConversationId) return;
+    if (localCreatedIdsRef.current.has(existingConversationId)) return;
 
     let cancelled = false;
     async function load() {
@@ -130,6 +140,14 @@ export default function ChatView({
         setTitle(displayText.slice(0, 40));
       }
 
+      // ---- Phase 1: optimistic UI ----
+      // Snapshot prior messages so we can build the LLM history without
+      // including the empty assistant placeholder we're about to add.
+      const priorMessages = messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+
       setMessages((prev) => [
         ...prev,
         { role: "user", content: displayText, imagePreview: image?.preview },
@@ -137,31 +155,53 @@ export default function ChatView({
       setIsStreaming(true);
       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
+      // ---- Phase 2: persistence (client-side, RLS-protected) ----
+      // Check session up front. If signed in, ensure a conversation row
+      // exists, then save the user message immediately.
+      const supabase = getSupabase();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      let activeConvId: string | null = conversationId;
+      if (session) {
+        if (!activeConvId) {
+          activeConvId = await createConversation(displayText.slice(0, 50));
+          if (activeConvId) {
+            localCreatedIdsRef.current.add(activeConvId);
+            setConversationId(activeConvId);
+            // Update the URL bar without remounting / re-running effects.
+            window.history.replaceState({}, "", `/chat/${activeConvId}`);
+            // Tell the sidebar to refresh.
+            window.dispatchEvent(new Event("conversation-created"));
+          }
+        }
+        if (activeConvId) {
+          // Save the user message before streaming so reloads see it
+          // even if the assistant response fails.
+          await saveMessage(activeConvId, "user", displayText);
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "[chat] you are signed out — this conversation will NOT be saved. Sign in at /auth/login to persist chats."
+        );
+      }
+
+      // ---- Phase 3: stream the LLM response ----
+      let fullResponse = "";
       try {
         const payload: Record<string, unknown> = {
           message: displayText,
-          conversationId,
+          history: priorMessages,
         };
         if (image) {
           payload.image = { data: image.data, mimeType: image.mimeType };
         }
 
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-
-        const supabase = getSupabase();
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session?.access_token) {
-          headers["Authorization"] = `Bearer ${session.access_token}`;
-        }
-
         const res = await fetch("/api/chat", {
           method: "POST",
-          headers,
-          credentials: "include",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
@@ -181,13 +221,6 @@ export default function ChatView({
           return;
         }
 
-        const newConvId = res.headers.get("X-Conversation-Id");
-        if (newConvId && !conversationId) {
-          setConversationId(newConvId);
-          router.replace(`/chat/${newConvId}`);
-          window.dispatchEvent(new Event("conversation-created"));
-        }
-
         const reader = res.body?.getReader();
         if (!reader) {
           setIsStreaming(false);
@@ -199,6 +232,7 @@ export default function ChatView({
           const { done, value } = await reader.read();
           if (done) break;
           const chunk = decoder.decode(value, { stream: true });
+          fullResponse += chunk;
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
@@ -209,7 +243,8 @@ export default function ChatView({
             return updated;
           });
         }
-      } catch {
+      } catch (err) {
+        console.error("[chat] streaming error:", err);
         setMessages((prev) => {
           const updated = [...prev];
           updated[updated.length - 1] = {
@@ -219,11 +254,21 @@ export default function ChatView({
           };
           return updated;
         });
+        setIsStreaming(false);
+        return;
+      }
+
+      // ---- Phase 4: persist the assistant response ----
+      if (activeConvId && fullResponse.trim()) {
+        await saveMessage(activeConvId, "assistant", fullResponse);
+        await bumpConversationUpdatedAt(activeConvId);
+        // Refresh sidebar so updated_at ordering is current.
+        window.dispatchEvent(new Event("conversation-created"));
       }
 
       setIsStreaming(false);
     },
-    [conversationId, isStreaming, title, router]
+    [conversationId, isStreaming, title, messages]
   );
 
   async function handleDelete() {
