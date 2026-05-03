@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+checkpoints.sqlite
+checkpoints.sqlite-journal
+checkpoints.sqlite-wal
+checkpoints.sqlite-shm
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
