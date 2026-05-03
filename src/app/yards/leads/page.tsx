@@ -45,7 +45,7 @@ export default function YardLeadsPage() {
   return (
     <div className="p-4 lg:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Leads</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Leads</h1>
       </div>
 
       {/* Filter bar */}

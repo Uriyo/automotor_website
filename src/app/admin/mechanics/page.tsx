@@ -23,9 +23,9 @@ export default function AdminMechanicsPage() {
   const filtered = tier === "All" ? mechanics : mechanics.filter((m) => m.tier === tier);
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-5xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Mechanics</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Mechanics</h1>
         <span className="text-text-secondary text-sm">
           <span className="text-text-primary font-semibold">142</span> active mechanics
         </span>

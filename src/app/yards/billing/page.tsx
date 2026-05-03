@@ -11,8 +11,8 @@ const invoices = [
 
 export default function YardBillingPage() {
   return (
-    <div className="p-4 lg:p-8 max-w-3xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Billing</h1>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-3xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Billing</h1>
 
       {/* Current plan */}
       <div className="bg-panel rounded-xl border border-line p-5 mb-4">

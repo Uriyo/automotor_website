@@ -184,18 +184,18 @@ export default function JunkyardsPage() {
   return (
     <div className="min-h-screen pb-16">
       {/* Hero */}
-      <section className="px-4 lg:px-8 py-16 lg:py-24">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="px-4 lg:px-8 py-10 sm:py-14 lg:py-24">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
           <div>
-            <h1 className="font-semibold tracking-tight text-3xl lg:text-4xl text-text-primary mb-4 leading-tight">
+            <h1 className="font-semibold tracking-tight text-2xl sm:text-3xl lg:text-4xl text-text-primary mb-4 leading-tight text-balance">
               AI-qualified leads.
               <br />
               Delivered to your phone.
             </h1>
-            <p className="text-text-secondary text-lg mb-6">
+            <p className="text-text-secondary text-sm sm:text-base lg:text-lg mb-6 text-balance">
               Stop playing phone tag. Our AI calls customers for you. You just quote and close.
             </p>
-            <div className="flex gap-6 mb-8">
+            <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
               <div>
                 <p className="font-semibold tracking-tight text-2xl text-orange-DEFAULT">500+</p>
                 <p className="text-xs text-text-secondary">yards on the platform</p>
@@ -243,9 +243,9 @@ export default function JunkyardsPage() {
       </section>
 
       {/* How it works */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             How it works for yards
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -263,9 +263,9 @@ export default function JunkyardsPage() {
       </section>
 
       {/* Pricing */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             Simple, transparent pricing
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -310,16 +310,16 @@ export default function JunkyardsPage() {
       </section>
 
       {/* ROI Calculator */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-2xl mx-auto">
           <ROICalculator />
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             What yards are saying
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -345,7 +345,7 @@ export default function JunkyardsPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">
             Frequently asked questions

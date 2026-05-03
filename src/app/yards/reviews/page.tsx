@@ -24,8 +24,8 @@ const avgRating = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).t
 
 export default function YardReviewsPage() {
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-3xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Reviews</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-3xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Reviews</h1>
 
       {/* Summary */}
       <div className="bg-panel rounded-xl border border-orange-DEFAULT/20 p-5 flex items-center gap-6 mb-6">

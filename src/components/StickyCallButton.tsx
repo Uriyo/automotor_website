@@ -1,16 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Phone, X, MessageSquare } from "lucide-react";
-import clsx from "clsx";
 
 export default function StickyCallButton() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [chatFocused, setChatFocused] = useState(false);
+  const pathname = usePathname();
 
   const handleMobileClick = () => {
     window.location.href = "tel:+18005551234";
   };
+
+  // Hide entirely on routes that have their own bottom UI to avoid
+  // stacking / covering content. The button is a marketing affordance —
+  // not needed inside chat/dashboard contexts.
+  const hide =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/yards/") ||
+    pathname.startsWith("/mechanics/dashboard") ||
+    pathname.startsWith("/mechanics/requests") ||
+    pathname.startsWith("/mechanics/quotes") ||
+    pathname.startsWith("/mechanics/customers") ||
+    pathname.startsWith("/mechanics/earnings") ||
+    pathname.startsWith("/mechanics/referrals") ||
+    pathname.startsWith("/mechanics/ai-tools") ||
+    pathname.startsWith("/mechanics/settings") ||
+    pathname.startsWith("/chat/") ||
+    pathname.startsWith("/auth/");
+
+  if (hide) return null;
 
   return (
     <>
@@ -25,17 +44,13 @@ export default function StickyCallButton() {
         </button>
       </div>
 
-      {/* Mobile: full-width bar pinned to bottom */}
-      <div
-        className={clsx(
-          "lg:hidden fixed bottom-0 left-0 right-0 z-40 pb-safe border-t border-line bg-panel",
-          "transition-all duration-200",
-          chatFocused ? "translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
-        )}
-      >
+      {/* Mobile: full-width bar pinned to bottom (only on marketing
+          surfaces — hidden on chat/dashboard via the early return above) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pb-safe border-t border-line bg-panel">
         <button
           onClick={handleMobileClick}
-          className="w-full bg-orange-DEFAULT text-white font-medium py-3.5 text-sm flex items-center justify-center gap-2"
+          className="w-full bg-orange-DEFAULT text-white font-medium py-3.5 text-sm flex items-center justify-center gap-2 tap-target"
+          aria-label="Call AutoMotor for a free quote"
         >
           <Phone size={14} aria-hidden="true" />
           Call for a free quote
@@ -44,7 +59,7 @@ export default function StickyCallButton() {
 
       {/* Desktop modal */}
       {modalOpen && (
-        <div className="hidden lg:flex fixed inset-0 z-50 items-center justify-center">
+        <div className="hidden lg:flex fixed inset-0 z-50 items-center justify-center px-4">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setModalOpen(false)}
@@ -92,6 +107,11 @@ export default function StickyCallButton() {
           </div>
         </div>
       )}
+
+      {/* Spacer that adds bottom padding on mobile so page content
+          doesn't get stuck under the fixed bar. Only shown when the
+          bar is. */}
+      <div className="lg:hidden h-16 mb-safe" aria-hidden="true" />
     </>
   );
 }

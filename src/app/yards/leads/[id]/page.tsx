@@ -20,7 +20,7 @@ export default function LeadDetailPage() {
   const [notes, setNotes] = useState("");
 
   return (
-    <div className="p-4 lg:p-8 max-w-6xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
       <Link href="/yards/leads" className="inline-flex items-center gap-1.5 text-text-secondary hover:text-text-primary text-sm mb-6 transition-colors">
         <ArrowLeft size={14} aria-hidden="true" />
         Back to leads

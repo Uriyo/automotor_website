@@ -67,7 +67,7 @@ export default function NewPartRequestPage() {
   const profit = currentRetail - baseQuote.total;
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-lg">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-lg">
       {/* Progress */}
       {step < 7 && (
         <div className="mb-8">

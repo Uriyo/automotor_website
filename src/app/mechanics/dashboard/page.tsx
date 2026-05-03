@@ -66,11 +66,11 @@ export default function MechanicDashboardPage() {
   const pctToPlat = (currentDeals / PLATINUM_GOAL) * 100;
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-5xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-5xl">
       {/* Greeting */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="font-semibold tracking-tight text-2xl text-text-primary">
+          <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">
             Welcome back, Mike&apos;s Auto.
           </h1>
         </div>

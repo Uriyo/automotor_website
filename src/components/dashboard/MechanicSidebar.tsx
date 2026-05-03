@@ -27,7 +27,7 @@ export default function MechanicSidebar() {
       <button
         aria-label="Open menu"
         onClick={() => setOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center rounded-lg bg-panel border border-line"
+        className="lg:hidden fixed top-3 left-3 z-50 w-11 h-11 flex items-center justify-center rounded-lg bg-panel border border-line shadow-sm"
       >
         <Menu size={20} />
       </button>
@@ -35,7 +35,7 @@ export default function MechanicSidebar() {
       <aside
         aria-label="Mechanic dashboard navigation"
         className={clsx(
-          "fixed lg:relative z-50 lg:z-auto w-[260px] h-full flex-shrink-0 bg-panel border-r border-line flex flex-col transition-transform lg:translate-x-0",
+          "fixed lg:relative z-50 lg:z-auto w-[280px] sm:w-[300px] lg:w-[260px] h-full flex-shrink-0 bg-panel border-r border-line flex flex-col transition-transform lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >

@@ -28,11 +28,11 @@ export default function AdminSidebar() {
 
   return (
     <>
-      <button aria-label="Open menu" onClick={() => setOpen(true)} className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center rounded-lg bg-panel border border-line">
+      <button aria-label="Open menu" onClick={() => setOpen(true)} className="lg:hidden fixed top-3 left-3 z-50 w-11 h-11 flex items-center justify-center rounded-lg bg-panel border border-line shadow-sm">
         <Menu size={20} />
       </button>
       {open && <div className="lg:hidden fixed inset-0 bg-black/60 z-40" onClick={() => setOpen(false)} aria-hidden="true" />}
-      <aside aria-label="Admin navigation" className={clsx("fixed lg:relative z-50 lg:z-auto w-[240px] h-full flex-shrink-0 bg-panel border-r border-line flex flex-col transition-transform lg:translate-x-0", open ? "translate-x-0" : "-translate-x-full")}>
+      <aside aria-label="Admin navigation" className={clsx("fixed lg:relative z-50 lg:z-auto w-[280px] sm:w-[300px] lg:w-[240px] h-full flex-shrink-0 bg-panel border-r border-line flex flex-col transition-transform lg:translate-x-0", open ? "translate-x-0" : "-translate-x-full")}>
         <button aria-label="Close menu" onClick={() => setOpen(false)} className="lg:hidden absolute top-4 right-4 text-text-secondary hover:text-text-primary"><X size={18} /></button>
         <div className="px-5 pt-5 pb-3">
           <div className="flex items-center gap-2.5">

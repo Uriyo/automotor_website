@@ -15,8 +15,8 @@ export default function YardSettingsPage() {
   }
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-2xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Settings</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-2xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Settings</h1>
 
       {/* Business info */}
       <div className="bg-panel rounded-xl border border-line p-5 mb-4">

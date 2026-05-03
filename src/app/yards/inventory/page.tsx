@@ -22,7 +22,7 @@ export default function YardInventoryPage() {
   return (
     <div className="p-4 lg:p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Inventory</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Inventory</h1>
         <div className="flex gap-2">
           <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-line text-text-secondary text-sm hover:text-text-primary hover:bg-elevated transition-colors">
             <Upload size={14} aria-hidden="true" />

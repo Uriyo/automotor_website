@@ -28,9 +28,9 @@ export default function AdminLeadsPage() {
   const filtered = status === "All" ? leads : leads.filter((l) => l.status === status);
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-6xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Leads</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Leads</h1>
         <div className="flex items-center gap-2 text-sm text-text-secondary">
           <span className="text-green-400 font-semibold">↑ 18%</span> vs last 7 days
         </div>

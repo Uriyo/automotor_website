@@ -143,7 +143,7 @@ export default function QuoteDetailPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 sm:gap-8 pb-24 lg:pb-0">
           {/* Left column */}
           <div className="space-y-6">
             {/* Image gallery */}

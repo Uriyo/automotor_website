@@ -13,9 +13,9 @@ export default function MechanicQuotesPage() {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-4xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-4xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Active Quotes</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Active Quotes</h1>
       </div>
 
       <div className="space-y-2">

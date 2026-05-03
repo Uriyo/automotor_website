@@ -19,7 +19,7 @@ const levelConfig = {
 
 export default function AdminAnomaliesPage() {
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-3xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-3xl">
       <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6 flex items-center gap-2"><AlertTriangle size={22} className="text-red-400" aria-hidden="true" /> Anomalies</h1>
 
       <div className="space-y-3">

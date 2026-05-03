@@ -34,9 +34,9 @@ export default function AdminOverviewPage() {
   const [chartPeriod, setChartPeriod] = useState<"GMV" | "leads" | "subs" | "take">("GMV");
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-7xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-7xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Operations Overview</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Operations Overview</h1>
         <div className="flex items-center gap-2 text-xs text-green-400">
           <Activity size={12} aria-hidden="true" />
           All systems operational

@@ -105,6 +105,7 @@ export default function Sidebar() {
     window.dispatchEvent(new Event("conversation-created"));
   }
 
+  // Don't render the sidebar on dashboards (they have their own).
   const isAdminOrDash =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/yards/") ||
@@ -119,19 +120,31 @@ export default function Sidebar() {
 
   if (isAdminOrDash) return null;
 
+  // The mobile hamburger should only appear on routes that DON'T have
+  // their own page-level top nav. On the homepage, marketing pages,
+  // auth screens, and detail pages there's already a header — the
+  // hamburger would visually collide with the logo and intercept
+  // clicks meant for it. Limit it to the chat experience where it's
+  // genuinely useful (recent conversations) and there's no own-nav.
+  const showMobileHamburger = pathname.startsWith("/chat");
+
   return (
     <>
-      {/* Mobile hamburger */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center rounded-xl bg-panel border border-line"
-        aria-label="Open menu"
-      >
-        <Menu size={20} className="text-text-primary" />
-      </button>
+      {/* Mobile hamburger — only on routes where the drawer is useful
+          and where it won't collide with a page-level top nav. */}
+      {showMobileHamburger && (
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="lg:hidden fixed top-3 left-3 z-50 w-11 h-11 flex items-center justify-center rounded-lg bg-panel border border-line shadow-sm"
+          aria-label="Open menu"
+          aria-expanded={mobileOpen}
+        >
+          <Menu size={20} className="text-text-primary" />
+        </button>
+      )}
 
       {/* Mobile overlay */}
-      {mobileOpen && (
+      {mobileOpen && showMobileHamburger && (
         <div
           className="lg:hidden fixed inset-0 bg-black/60 z-40"
           onClick={() => setMobileOpen(false)}
@@ -139,12 +152,16 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — desktop is always visible. The mobile drawer only
+          opens when there's a hamburger to open it; on routes without
+          a hamburger we suppress the mobile-drawer offcanvas entirely
+          by adding `lg:translate-x-0` (already there) and forcing it
+          off-screen on mobile. */}
       <aside
         aria-label="Primary navigation"
         className={clsx(
           "fixed lg:relative z-50 lg:z-auto",
-          "w-[260px] h-full flex-shrink-0",
+          "w-[280px] sm:w-[300px] lg:w-[260px] h-full flex-shrink-0",
           "bg-panel border-r border-line",
           "flex flex-col",
           "transition-transform duration-200 ease-out lg:translate-x-0",

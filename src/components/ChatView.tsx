@@ -141,13 +141,9 @@ export default function ChatView({
       }
 
       // ---- Phase 1: optimistic UI ----
-      // Snapshot prior messages so we can build the LLM history without
-      // including the empty assistant placeholder we're about to add.
-      const priorMessages = messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
-
+      // History no longer travels in the request body. The LangGraph
+      // agent owns conversation state via Postgres checkpoints keyed
+      // by thread_id (= conversationId).
       setMessages((prev) => [
         ...prev,
         { role: "user", content: displayText, imagePreview: image?.preview },
@@ -189,19 +185,43 @@ export default function ChatView({
       }
 
       // ---- Phase 3: stream the LLM response ----
+      // The graph needs a thread_id to load/save checkpoint state. We
+      // require one — if the user is anonymous and we couldn't create
+      // a `conversations` row above, we fall back to a per-tab id so
+      // the in-memory turn still works (won't persist across refresh).
+      const threadId =
+        activeConvId ??
+        (typeof window !== "undefined"
+          ? (sessionStorage.getItem("anonThreadId") ??
+            (() => {
+              const id = `anon-${crypto.randomUUID()}`;
+              sessionStorage.setItem("anonThreadId", id);
+              return id;
+            })())
+          : `anon-${Date.now()}`);
+
       let fullResponse = "";
       try {
         const payload: Record<string, unknown> = {
+          thread_id: threadId,
           message: displayText,
-          history: priorMessages,
         };
         if (image) {
           payload.image = { data: image.data, mimeType: image.mimeType };
         }
 
+        const requestHeaders: Record<string, string> = {
+          "Content-Type": "application/json",
+        };
+        if (session?.access_token) {
+          // Forwarded by /api/chat to the agent service for JWT-based
+          // user identification (no DB round-trip required).
+          requestHeaders["Authorization"] = `Bearer ${session.access_token}`;
+        }
+
         const res = await fetch("/api/chat", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: requestHeaders,
           body: JSON.stringify(payload),
         });
 
@@ -303,23 +323,26 @@ export default function ChatView({
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex items-center justify-between px-4 lg:px-6 py-4 border-b border-line flex-shrink-0">
+        <div className="flex items-center justify-between gap-2 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-line flex-shrink-0 pl-16 lg:pl-6">
+          {/* `pl-16 lg:pl-6` clears space for the mobile sidebar
+              hamburger which is fixed at top-4 left-4. */}
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-text-secondary hover:text-text-primary transition-colors text-sm"
+            aria-label="Start a new chat"
+            className="flex items-center gap-1.5 text-text-secondary hover:text-text-primary transition-colors text-sm flex-shrink-0"
           >
             <ArrowLeft size={15} />
-            New chat
+            <span className="hidden sm:inline">New chat</span>
           </Link>
-          <h2 className="font-medium text-text-primary text-sm truncate max-w-[200px] lg:max-w-sm">
+          <h2 className="font-medium text-text-primary text-sm truncate min-w-0 flex-1 text-center">
             {title}
           </h2>
-          <div className="relative" ref={menuRef}>
+          <div className="relative flex-shrink-0" ref={menuRef}>
             <button
               type="button"
               aria-label="More options"
               onClick={() => setShowMenu((v) => !v)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-elevated transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-elevated transition-colors"
             >
               <MoreHorizontal size={16} />
             </button>
@@ -346,13 +369,13 @@ export default function ChatView({
           aria-live="polite"
           aria-relevant="additions text"
           aria-label="Conversation"
-          className="flex-1 overflow-y-auto px-4 lg:px-6 py-6 space-y-4"
+          className="flex-1 overflow-y-auto overflow-x-hidden px-3 sm:px-4 lg:px-6 py-4 sm:py-6 space-y-4"
         >
           {messages.map((msg, i) => (
             <div key={i} className="message-enter">
               {msg.role === "user" ? (
                 <div className="flex justify-end">
-                  <div className="max-w-[85%] bg-panel border-l-2 border-orange-DEFAULT/40 rounded-xl px-4 py-3 text-text-primary text-sm leading-relaxed">
+                  <div className="max-w-[88%] sm:max-w-[85%] bg-panel border-l-2 border-orange-DEFAULT/40 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-text-primary text-sm leading-relaxed break-words">
                     <span className="sr-only">You said: </span>
                     {msg.imagePreview && (
                       <img
@@ -365,7 +388,7 @@ export default function ChatView({
                   </div>
                 </div>
               ) : (
-                <div className="flex items-start gap-3 max-w-[85%]">
+                <div className="flex items-start gap-2 sm:gap-3 max-w-[92%] sm:max-w-[85%]">
                   <div
                     className="w-7 h-7 rounded-full bg-orange-DEFAULT/10 border border-orange-DEFAULT/20 flex items-center justify-center flex-shrink-0 mt-0.5"
                     aria-hidden="true"
@@ -373,7 +396,7 @@ export default function ChatView({
                     <Wrench size={13} className="text-orange-DEFAULT" />
                   </div>
                   <div className="flex-1">
-                    <div className="bg-panel rounded-xl px-4 py-3 text-text-primary text-sm leading-relaxed whitespace-pre-wrap">
+                    <div className="bg-panel rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-text-primary text-sm leading-relaxed whitespace-pre-wrap break-words">
                       <span className="sr-only">AutoMotor said: </span>
                       {msg.content || "\u00A0"}
                     </div>

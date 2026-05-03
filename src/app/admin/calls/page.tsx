@@ -26,9 +26,9 @@ export default function AdminCallsPage() {
   const filtered = outcome === "All" ? calls : calls.filter((c) => c.outcome === outcome);
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-5xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Calls</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Calls</h1>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/10 border border-green-500/20">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           <span className="text-green-400 text-xs font-medium">2 live now</span>

@@ -49,8 +49,8 @@ const GROUPS = [
 
 export default function AdminDisputesPage() {
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-4xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Disputes</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-4xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Disputes</h1>
       <div className="space-y-8">
         {GROUPS.map((group) => {
           const items = disputes.filter((d) => d.priority === group.priority);

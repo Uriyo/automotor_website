@@ -14,8 +14,8 @@ export default function AdminYardsPage() {
   const [filter, setFilter] = useState("All");
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-5xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Yards</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-5xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Yards</h1>
       <div className="flex gap-2 mb-4">
         {["All", "Basic", "Pro", "Exclusive"].map((f) => (
           <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${filter === f ? "bg-orange-DEFAULT/20 border-orange-DEFAULT text-orange-DEFAULT" : "border-line text-text-secondary hover:border-text-tertiary"}`}>

@@ -27,8 +27,8 @@ export default function AdminAIPage() {
   );
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-4xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">AI Monitor</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-4xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">AI Monitor</h1>
 
       {/* Tabs */}
       <div className="flex gap-1 p-1 bg-panel rounded-xl mb-6 max-w-xs">

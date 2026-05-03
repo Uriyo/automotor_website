@@ -34,7 +34,7 @@ export default function YardHelpPage() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-3xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-3xl">
       <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-2">Help Center</h1>
       <p className="text-text-secondary text-sm mb-8">Everything you need to get the most out of AutoMotor for Yards.</p>
 

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
@@ -50,6 +50,20 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Allow user-zoom up to 5× — accessibility (WCAG 1.4.4)
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#09090B" },
+    { media: "(prefers-color-scheme: light)", color: "#09090B" },
+  ],
+  // Use full screen including notch / home-indicator areas on iOS
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,9 +79,12 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <div className="flex h-screen overflow-hidden">
+          <div className="flex h-[100dvh] overflow-hidden">
             <Sidebar />
-            <main id="main-content" className="flex-1 overflow-y-auto relative">
+            <main
+              id="main-content"
+              className="flex-1 overflow-y-auto overflow-x-hidden relative"
+            >
               {children}
             </main>
           </div>

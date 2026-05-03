@@ -157,17 +157,20 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Top nav */}
-      <nav className="flex items-center justify-between px-6 py-4 lg:px-8 border-b border-line">
-        <Link href="/" aria-label="AutoMotor.AI home">
-          <LogoLockup size={28} textClassName="text-base" />
+      <nav className="flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 border-b border-line">
+        <Link href="/" aria-label="AutoMotor.AI home" className="flex-shrink min-w-0">
+          <LogoLockup size={26} textClassName="text-sm sm:text-base whitespace-nowrap" />
         </Link>
-        <div className="flex items-center gap-2">
-          <button className="text-sm text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5">
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+          <Link
+            href="/auth/login"
+            className="hidden sm:inline-block text-sm text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5"
+          >
             Sign in
-          </button>
+          </Link>
           <Link
             href="/chat/new"
-            className="px-3.5 py-1.5 rounded-lg bg-orange-DEFAULT text-white text-sm font-medium hover:bg-orange-hover transition-colors"
+            className="px-3 sm:px-3.5 py-2 sm:py-1.5 rounded-lg bg-orange-DEFAULT text-white text-xs sm:text-sm font-medium hover:bg-orange-hover transition-colors whitespace-nowrap"
           >
             Get a quote
           </Link>
@@ -175,16 +178,21 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center min-h-[78vh] px-4 lg:px-8 text-center">
+      <section className="flex flex-col items-center justify-center min-h-[calc(100dvh-65px)] px-4 sm:px-6 lg:px-8 py-12 lg:py-0 text-center">
         <div className="w-full max-w-[680px] mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-line bg-panel text-xs text-text-secondary mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-            12,847 drivers · 4.9 rating · $3.2M saved this year
+          {/* Social proof pill — wraps gracefully on small screens */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full border border-line bg-panel text-[11px] sm:text-xs text-text-secondary mb-5 sm:mb-6 max-w-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+            <span>12,847 drivers</span>
+            <span aria-hidden="true">·</span>
+            <span>4.9 rating</span>
+            <span aria-hidden="true">·</span>
+            <span>$3.2M saved this year</span>
           </div>
-          <h1 className="font-semibold text-4xl lg:text-6xl tracking-tight text-text-primary mb-4">
+          <h1 className="font-semibold text-3xl sm:text-4xl lg:text-6xl tracking-tight text-text-primary mb-3 sm:mb-4 text-balance">
             The fastest way to find a used engine.
           </h1>
-          <p className="text-base lg:text-lg text-text-secondary mb-10 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-text-secondary mb-8 sm:mb-10 max-w-xl mx-auto text-balance">
             Describe what you need. Our AI calls 15 junkyards in parallel and returns
             comparable quotes in under 90 seconds.
           </p>
@@ -195,13 +203,13 @@ export default function HomePage() {
             className="mb-4"
           />
 
-          {/* Suggestion chips */}
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 justify-start lg:justify-center">
+          {/* Suggestion chips — horizontal scroll on mobile, wrap on tablet+ */}
+          <div className="-mx-4 sm:mx-0 px-4 sm:px-0 flex sm:flex-wrap gap-2 overflow-x-auto no-scrollbar pb-1 justify-start sm:justify-center">
             {suggestionChips.map((chip) => (
               <button
                 key={chip}
                 onClick={() => handleChatSubmit(chip)}
-                className="flex-shrink-0 px-3 py-1.5 rounded-full border border-line text-text-secondary text-xs hover:border-text-tertiary hover:text-text-primary transition-colors whitespace-nowrap"
+                className="flex-shrink-0 px-3 py-2 sm:py-1.5 rounded-full border border-line text-text-secondary text-xs hover:border-text-tertiary hover:text-text-primary transition-colors whitespace-nowrap"
               >
                 {chip}
               </button>
@@ -211,7 +219,7 @@ export default function HomePage() {
       </section>
 
       {/* Section A — Video */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <div className="bg-panel rounded-xl border border-line overflow-hidden">
             <div className="relative aspect-video bg-elevated flex items-center justify-center">
@@ -233,7 +241,7 @@ export default function HomePage() {
       </section>
 
       {/* Section B — How it works */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">How it works</p>
           <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
@@ -262,7 +270,7 @@ export default function HomePage() {
       </section>
 
       {/* Section C — Category cards */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Coverage</p>
           <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
@@ -294,7 +302,7 @@ export default function HomePage() {
       </section>
 
       {/* Section D — Trust badges */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Why drivers trust us</p>
           <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
@@ -317,7 +325,7 @@ export default function HomePage() {
       </section>
 
       {/* Section E — Testimonials */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Customers</p>
           <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
@@ -355,7 +363,7 @@ export default function HomePage() {
       </section>
 
       {/* Section F — For mechanics and junkyards */}
-      <section className="px-4 lg:px-8 py-20 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-3">
           <div className="bg-panel rounded-xl border border-line p-6">
             <Wrench size={18} className="text-orange-DEFAULT mb-4" aria-hidden="true" />
@@ -393,7 +401,7 @@ export default function HomePage() {
       </section>
 
       {/* Section G — Final CTA */}
-      <section className="px-4 lg:px-8 py-24 border-t border-line">
+      <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 border-t border-line">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="font-semibold text-3xl lg:text-4xl tracking-tight text-text-primary mb-4">
             Find your part in 90 seconds.

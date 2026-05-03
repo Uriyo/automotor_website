@@ -1,13 +1,11 @@
 "use client";
 
-import { use } from "react";
 import ChatView from "@/components/ChatView";
 
 export default function ExistingChatPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = use(params);
-  return <ChatView existingConversationId={id} />;
+  return <ChatView existingConversationId={params.id} />;
 }

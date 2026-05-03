@@ -9,8 +9,8 @@ const payouts = [
 
 export default function MechanicEarningsPage() {
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-3xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">Earnings</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-3xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">Earnings</h1>
 
       {/* Lifetime hero */}
       <div className="bg-panel rounded-xl border border-orange-DEFAULT/20 p-6 text-center mb-4">

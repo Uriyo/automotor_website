@@ -31,7 +31,7 @@ export default function ReferralsPage() {
   };
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-3xl mx-auto pb-20 lg:pb-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-3xl mx-auto pb-20 lg:pb-8">
       {/* Hero */}
       <div className="bg-panel rounded-xl border border-orange-DEFAULT/20 p-6 text-center mb-6">
         <p className="text-text-secondary text-sm mb-1">You&apos;ve earned in referral credit</p>

@@ -171,3 +171,65 @@ create policy "Users can insert own messages"
   on messages for insert
   to authenticated
   with check (conversation_id in (select id from conversations where user_id = auth.uid()));
+
+
+-- ---------------------------------------------------------------------
+-- LangGraph checkpoint tables
+-- ---------------------------------------------------------------------
+-- These four tables are auto-created at runtime by the LangGraph
+-- PostgresSaver (see src/lib/agent/checkpointer.ts → setup()):
+--
+--   checkpoints
+--   checkpoint_blobs
+--   checkpoint_writes
+--   checkpoint_migrations
+--
+-- They are accessed only by the server (via SUPABASE_DB_URL) and store
+-- agent state per `thread_id` (= conversations.id). RLS is not applied —
+-- access is gated by the direct DB connection, which is server-only.
+-- No manual migration needed; do NOT manually edit these tables.
+
+
+-- ---------------------------------------------------------------------
+-- LangGraph checkpoint tables (Supabase REST-backed saver)
+-- ---------------------------------------------------------------------
+-- Used by src/lib/agent/supabase-saver.ts. Server-only access via the
+-- service-role key. No client-facing RLS policies — anonymous users
+-- have no business reading agent state.
+
+create table if not exists lg_checkpoints (
+  thread_id text not null,
+  checkpoint_ns text not null default '',
+  checkpoint_id text not null,
+  parent_checkpoint_id text,
+  type text not null,
+  checkpoint bytea not null,
+  metadata bytea not null,
+  created_at timestamptz not null default now(),
+  primary key (thread_id, checkpoint_ns, checkpoint_id)
+);
+
+create index if not exists lg_checkpoints_thread_idx
+  on lg_checkpoints (thread_id, checkpoint_ns, checkpoint_id desc);
+
+alter table lg_checkpoints enable row level security;
+-- No policies for anon/authenticated. Service role bypasses RLS, which
+-- is the only access path the agent uses.
+
+create table if not exists lg_writes (
+  thread_id text not null,
+  checkpoint_ns text not null default '',
+  checkpoint_id text not null,
+  task_id text not null,
+  idx integer not null,
+  channel text not null,
+  type text not null,
+  value bytea not null,
+  created_at timestamptz not null default now(),
+  primary key (thread_id, checkpoint_ns, checkpoint_id, task_id, idx)
+);
+
+create index if not exists lg_writes_thread_idx
+  on lg_writes (thread_id, checkpoint_ns, checkpoint_id);
+
+alter table lg_writes enable row level security;

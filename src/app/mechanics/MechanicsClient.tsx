@@ -181,18 +181,18 @@ export default function MechanicsPage() {
   return (
     <div className="min-h-screen pb-16">
       {/* Hero */}
-      <section className="px-4 lg:px-8 py-16 lg:py-24">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="px-4 lg:px-8 py-10 sm:py-14 lg:py-24">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
           <div>
-            <h1 className="font-semibold tracking-tight text-3xl lg:text-4xl text-text-primary mb-4 leading-tight">
+            <h1 className="font-semibold tracking-tight text-2xl sm:text-3xl lg:text-4xl text-text-primary mb-4 leading-tight text-balance">
               Earn $500+ per engine job.
               <br />
               Without the sourcing headache.
             </h1>
-            <p className="text-text-secondary text-lg mb-6">
+            <p className="text-text-secondary text-sm sm:text-base lg:text-lg mb-6 text-balance">
               Our AI finds the engine. You install it and keep the markup. Simple.
             </p>
-            <div className="flex gap-6 mb-8">
+            <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
               {[
                 { num: "2,400+", label: "mechanic partners" },
                 { num: "$4,200", label: "avg extra/month" },
@@ -206,7 +206,7 @@ export default function MechanicsPage() {
             </div>
             <Link
               href="/mechanics/signup"
-              className="inline-block px-4 py-2.5 rounded-lg bg-orange-DEFAULT text-white font-semibold hover:bg-orange-hover transition-colors"
+              className="inline-flex justify-center px-5 py-2.5 rounded-lg bg-orange-DEFAULT text-white font-semibold hover:bg-orange-hover transition-colors w-full sm:w-auto"
             >
               Become a Partner Mechanic — Free to start
             </Link>
@@ -243,9 +243,9 @@ export default function MechanicsPage() {
       </section>
 
       {/* How it works */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             How it works for mechanics
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -263,9 +263,9 @@ export default function MechanicsPage() {
       </section>
 
       {/* Earning models */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             Choose your earning model
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -293,9 +293,9 @@ export default function MechanicsPage() {
       </section>
 
       {/* Tier system */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-semibold tracking-tight text-2xl lg:text-3xl text-text-primary text-center mb-8">
+          <h2 className="font-semibold tracking-tight text-xl sm:text-2xl lg:text-3xl text-text-primary text-center mb-6 sm:mb-8 text-balance">
             Tier system — the more you do, the less you pay
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -328,7 +328,7 @@ export default function MechanicsPage() {
       </section>
 
       {/* Live earnings ticker */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-2xl mx-auto">
           <h3 className="font-semibold tracking-tight text-lg text-text-primary text-center mb-4">
             Partner earnings, live
@@ -338,7 +338,7 @@ export default function MechanicsPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {testimonials.map((t, i) => (
@@ -362,7 +362,7 @@ export default function MechanicsPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 lg:px-8 mb-16">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">
             Frequently asked questions

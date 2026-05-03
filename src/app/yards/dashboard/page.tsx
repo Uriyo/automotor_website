@@ -57,7 +57,7 @@ export default function YardDashboardPage() {
   };
 
   return (
-    <div className="px-4 lg:px-8 py-8 max-w-7xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
       {/* Upgrade banner */}
       <div className="bg-orange-DEFAULT/10 border border-orange-DEFAULT/30 rounded-xl px-4 py-3 mb-6 flex items-center justify-between">
         <p className="text-sm text-text-secondary flex items-center gap-2">
@@ -75,7 +75,7 @@ export default function YardDashboardPage() {
 
       {/* Greeting */}
       <div className="mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">
           Good morning, Tommy&apos;s Auto Salvage.
         </h1>
       </div>

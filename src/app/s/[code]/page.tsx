@@ -60,7 +60,7 @@ export default function ShareLandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="px-4 lg:px-8 mb-12">
+      <section className="px-4 sm:px-6 lg:px-8 mb-12">
         <div className="max-w-3xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {([
@@ -81,7 +81,7 @@ export default function ShareLandingPage() {
       </section>
 
       {/* Live savings */}
-      <section className="px-4 lg:px-8 mb-12">
+      <section className="px-4 sm:px-6 lg:px-8 mb-12">
         <div className="max-w-2xl mx-auto">
           <h3 className="font-semibold tracking-tight text-xl text-text-primary text-center mb-4">
             Real savings happening right now
@@ -97,7 +97,7 @@ export default function ShareLandingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 lg:px-8 mb-12">
+      <section className="px-4 sm:px-6 lg:px-8 mb-12">
         <div className="max-w-2xl mx-auto">
           <h3 className="font-semibold tracking-tight text-xl text-text-primary mb-4 text-center">Quick questions</h3>
           <div className="bg-panel rounded-xl border border-line p-5 space-y-4">

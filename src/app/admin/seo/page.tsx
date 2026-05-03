@@ -13,8 +13,8 @@ const topPages = [
 
 export default function AdminSEOPage() {
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-4xl">
-      <h1 className="font-semibold tracking-tight text-2xl text-text-primary mb-6">SEO</h1>
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-4xl">
+      <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary mb-5 sm:mb-6">SEO</h1>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
           { label: "Pages generated", value: "87,420" },

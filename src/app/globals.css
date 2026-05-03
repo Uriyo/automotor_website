@@ -14,6 +14,11 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent iOS Safari from auto-zooming when tapping inputs with
+     font-size < 16px. We size all inputs >=16px in `body` below. */
+  -webkit-text-size-adjust: 100%;
+  /* Reduce horizontal jitter on small screens with sticky headers. */
+  overflow-x: hidden;
 }
 
 body {
@@ -23,6 +28,29 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "cv11", "ss01";
+  /* Suppress the gray rectangle on tap on iOS. */
+  -webkit-tap-highlight-color: transparent;
+  /* Lock body width so a stray wide element can't cause horizontal
+     scroll on the entire page. */
+  overflow-x: hidden;
+  /* Improves scroll feel on iOS WebView. */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Force iOS-Safari NOT to zoom on input focus (kicks in only when
+   font-size >= 16px). Apply to common form controls. */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+@media (min-width: 640px) {
+  /* Restore design-system sizes on tablet+ where auto-zoom doesn't fire. */
+  input,
+  textarea,
+  select {
+    font-size: inherit;
+  }
 }
 
 ::selection {
@@ -90,6 +118,22 @@ body {
 }
 .mb-safe {
   margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+/* Account for the mobile sticky CTA + safe-area on bottom-pinned
+   chat inputs on `/chat/[id]`. The mobile CTA bar is ~52px tall. */
+.pb-mobile-cta {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 56px);
+}
+@media (min-width: 1024px) {
+  .pb-mobile-cta {
+    padding-bottom: 0;
+  }
+}
+
+/* Touch-friendly minimum hit target (44×44 per WCAG 2.5.5). */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 input, textarea, select, button {

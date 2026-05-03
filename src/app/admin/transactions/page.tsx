@@ -34,9 +34,9 @@ export default function AdminTransactionsPage() {
   const totalNet = filtered.reduce((sum, t) => sum + parseFloat(t.net.replace(/[$,]/g, "")), 0);
 
   return (
-    <div className="px-4 lg:px-8 py-6 max-w-5xl">
+    <div className="px-4 sm:px-6 lg:px-8 py-5 sm:py-6 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-semibold tracking-tight text-2xl text-text-primary">Transactions</h1>
+        <h1 className="font-semibold tracking-tight text-xl sm:text-2xl text-text-primary">Transactions</h1>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-text-secondary text-sm hover:text-text-primary transition-colors">
           <Download size={14} aria-hidden="true" /> Export CSV
         </button>
