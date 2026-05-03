@@ -323,9 +323,7 @@ export default function ChatView({
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex items-center justify-between gap-2 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-line flex-shrink-0 pl-16 lg:pl-6">
-          {/* `pl-16 lg:pl-6` clears space for the mobile sidebar
-              hamburger which is fixed at top-4 left-4. */}
+        <div className="flex items-center justify-between gap-2 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-line flex-shrink-0">
           <Link
             href="/"
             aria-label="Start a new chat"

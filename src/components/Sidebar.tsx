@@ -120,43 +120,32 @@ export default function Sidebar() {
 
   if (isAdminOrDash) return null;
 
-  // The mobile hamburger should only appear on routes that DON'T have
-  // their own page-level top nav. On the homepage, marketing pages,
-  // auth screens, and detail pages there's already a header — the
-  // hamburger would visually collide with the logo and intercept
-  // clicks meant for it. Limit it to the chat experience where it's
-  // genuinely useful (recent conversations) and there's no own-nav.
-  const showMobileHamburger = pathname.startsWith("/chat");
-
   return (
     <>
-      {/* Mobile hamburger — only on routes where the drawer is useful
-          and where it won't collide with a page-level top nav. */}
-      {showMobileHamburger && (
+      {/* Mobile top bar — logo + hamburger, hidden on lg where sidebar is always visible */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between h-14 px-4 bg-bg/80 backdrop-blur-md border-b border-line">
+        <Link href="/" aria-label="AutoMotor.AI home">
+          <LogoLockup size={22} textClassName="text-sm" />
+        </Link>
         <button
           onClick={() => setMobileOpen(true)}
-          className="lg:hidden fixed top-3 left-3 z-50 w-11 h-11 flex items-center justify-center rounded-lg bg-panel border border-line shadow-sm"
+          className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-elevated transition-colors"
           aria-label="Open menu"
           aria-expanded={mobileOpen}
         >
           <Menu size={20} className="text-text-primary" />
         </button>
-      )}
+      </header>
 
       {/* Mobile overlay */}
-      {mobileOpen && showMobileHamburger && (
+      {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/60 z-40"
+          className="lg:hidden fixed inset-0 bg-black/60 z-[45]"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar — desktop is always visible. The mobile drawer only
-          opens when there's a hamburger to open it; on routes without
-          a hamburger we suppress the mobile-drawer offcanvas entirely
-          by adding `lg:translate-x-0` (already there) and forcing it
-          off-screen on mobile. */}
       <aside
         aria-label="Primary navigation"
         className={clsx(

@@ -18,7 +18,7 @@ import {
   Warehouse,
 } from "lucide-react";
 import ChatInput from "@/components/ChatInput";
-import { LogoLockup, LogoMark } from "@/components/Logo";
+import { LogoLockup } from "@/components/Logo";
 
 const suggestionChips = [
   "My truck won't start",
@@ -156,29 +156,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Top nav */}
-      <nav className="flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 border-b border-line">
-        <Link href="/" aria-label="AutoMotor.AI home" className="flex-shrink min-w-0">
-          <LogoLockup size={26} textClassName="text-sm sm:text-base whitespace-nowrap" />
-        </Link>
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          <Link
-            href="/auth/login"
-            className="hidden sm:inline-block text-sm text-text-secondary hover:text-text-primary transition-colors px-3 py-1.5"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/chat/new"
-            className="px-3 sm:px-3.5 py-2 sm:py-1.5 rounded-lg bg-orange-DEFAULT text-white text-xs sm:text-sm font-medium hover:bg-orange-hover transition-colors whitespace-nowrap"
-          >
-            Get a quote
-          </Link>
-        </div>
-      </nav>
-
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center min-h-[calc(100dvh-65px)] px-4 sm:px-6 lg:px-8 py-12 lg:py-0 text-center">
+      <section className="flex flex-col items-center justify-center min-h-[calc(100dvh-3.5rem)] lg:min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-0 text-center">
         <div className="w-full max-w-[680px] mx-auto">
           {/* Social proof pill — wraps gracefully on small screens */}
           <div className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full border border-line bg-panel text-[11px] sm:text-xs text-text-secondary mb-5 sm:mb-6 max-w-full">
@@ -244,10 +223,10 @@ export default function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">How it works</p>
-          <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
             From problem to quote in under two minutes.
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-line rounded-xl overflow-hidden border border-line">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-line rounded-xl overflow-hidden border border-line">
             {steps.map((step, i) => (
               <div
                 key={i}
@@ -273,7 +252,7 @@ export default function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Coverage</p>
-          <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
             Engines, transmissions, and parts — every category.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -305,7 +284,7 @@ export default function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Why drivers trust us</p>
-          <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
             Built on guarantees, not promises.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -328,10 +307,10 @@ export default function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Customers</p>
-          <h2 className="font-semibold text-2xl lg:text-3xl tracking-tight text-text-primary text-center mb-12">
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
             12,847 drivers and counting.
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {testimonials.slice(0, 3).map((t, i) => (
               <div
                 key={i}
@@ -364,7 +343,7 @@ export default function HomePage() {
 
       {/* Section F — For mechanics and junkyards */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-panel rounded-xl border border-line p-6">
             <Wrench size={18} className="text-orange-DEFAULT mb-4" aria-hidden="true" />
             <h3 className="font-medium text-base text-text-primary mb-1.5">
@@ -403,7 +382,7 @@ export default function HomePage() {
       {/* Section G — Final CTA */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 border-t border-line">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="font-semibold text-3xl lg:text-4xl tracking-tight text-text-primary mb-4">
+          <h2 className="font-semibold text-3xl sm:text-4xl tracking-tight text-text-primary mb-4">
             Find your part in 90 seconds.
           </h2>
           <p className="text-text-secondary mb-10">
@@ -414,9 +393,9 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-line px-4 lg:px-8 pt-16 pb-10 mb-14 lg:mb-0">
+      <footer className="border-t border-line px-4 sm:px-6 lg:px-8 pt-16 pb-10 mb-14 lg:mb-0">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 mb-12">
             <div className="col-span-2 lg:col-span-1">
               <LogoLockup size={24} textClassName="text-base" className="mb-3" />
               <p className="text-xs text-text-secondary leading-relaxed max-w-[180px]">
@@ -443,7 +422,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pt-8 border-t border-line">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-8 border-t border-line">
             <p className="text-xs text-text-tertiary">
               © 2025 AutoMotor.AI · Austin, TX
             </p>
