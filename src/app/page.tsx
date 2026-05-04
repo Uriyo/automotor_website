@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -16,9 +17,60 @@ import {
   Anchor,
   Wrench,
   Warehouse,
+  Zap,
+  Clock,
+  DollarSign,
+  Headphones,
+  X,
+  ChevronDown,
 } from "lucide-react";
 import ChatInput from "@/components/ChatInput";
 import { LogoLockup } from "@/components/Logo";
+
+function useCountUp(end: number, duration = 2000, active = false) {
+  const [value, setValue] = useState(0);
+  const ref = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!active) return;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(eased * end));
+      if (t < 1) ref.current = requestAnimationFrame(tick);
+    };
+    ref.current = requestAnimationFrame(tick);
+    return () => {
+      if (ref.current) cancelAnimationFrame(ref.current);
+    };
+  }, [end, duration, active]);
+
+  return value;
+}
+
+function useInView(threshold = 0.3) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, inView };
+}
 
 const suggestionChips = [
   "My truck won't start",
@@ -85,18 +137,99 @@ const categoryCards = [
 const steps = [
   {
     icon: MessageSquare,
-    title: "Describe your problem.",
-    desc: "Tell our AI what's wrong — it diagnoses in seconds.",
+    title: "Describe your problem",
+    desc: "Tell our AI what\u2019s wrong with your vehicle \u2014 year, make, model, symptoms. It understands plain English and diagnoses the issue in seconds.",
+    detail: "No VIN lookup needed. No phone trees.",
   },
   {
     icon: Phone,
-    title: "AI calls 15 yards.",
-    desc: "Parallel calls. Live quotes. No waiting on hold.",
+    title: "AI calls 15+ yards simultaneously",
+    desc: "Our AI agent makes parallel calls to salvage yards across the country. Real conversations, real-time negotiation, verified inventory.",
+    detail: "Works 24/7. Covers 250,000+ partner yards.",
   },
   {
     icon: CheckCircle,
-    title: "Pick your quote.",
-    desc: "Compare prices, warranties, and shipping. We handle the rest.",
+    title: "Compare and buy with confidence",
+    desc: "Review quotes side-by-side with warranty info, mileage, shipping costs. Pick the best deal \u2014 we handle logistics and escrow payment.",
+    detail: "30-day fitment guarantee on every order.",
+  },
+];
+
+const features = [
+  {
+    icon: Zap,
+    title: "AI-Powered Search",
+    desc: "Natural language understanding. Describe your problem like you\u2019d tell a mechanic \u2014 our AI handles the rest.",
+  },
+  {
+    icon: Clock,
+    title: "90-Second Quotes",
+    desc: "Parallel calls to 15+ yards simultaneously. What used to take hours of phone calls now takes 90 seconds.",
+  },
+  {
+    icon: Shield,
+    title: "Fitment Guarantee",
+    desc: "30-day money-back guarantee if the part doesn\u2019t fit. We verify compatibility before you buy.",
+  },
+  {
+    icon: DollarSign,
+    title: "Escrow Protection",
+    desc: "Your payment is held in escrow until you confirm the part arrived and fits. Zero risk.",
+  },
+  {
+    icon: Truck,
+    title: "Nationwide Shipping",
+    desc: "Parts shipped from 250,000+ yards across all 50 states. Most deliveries in 3\u20135 business days.",
+  },
+  {
+    icon: Headphones,
+    title: "Human Backup",
+    desc: "AI handles 95% of cases. For the tricky ones, our expert team steps in within minutes.",
+  },
+];
+
+const comparisonOld = [
+  "Call yards one by one",
+  "Wait on hold for 20+ minutes each",
+  "No price comparison",
+  "No warranty or fitment guarantee",
+  "Pay upfront, hope it works",
+  "Takes 2\u20133 days of phone calls",
+];
+
+const comparisonNew = [
+  "AI calls 15 yards in parallel",
+  "Quotes in under 90 seconds",
+  "Side-by-side price comparison",
+  "30-day fitment guarantee included",
+  "Escrow payment protection",
+  "Done in 2 minutes, not 2 days",
+];
+
+const faqs = [
+  {
+    q: "How does AutoMotor find parts so fast?",
+    a: "Our AI agent makes parallel phone calls to 15+ salvage yards simultaneously \u2014 like having 15 people searching for your part at the same time. Traditional searches are sequential; ours are parallel.",
+  },
+  {
+    q: "What\u2019s the fitment guarantee?",
+    a: "Every part comes with a 30-day fitment guarantee. If the part doesn\u2019t fit your vehicle, we\u2019ll arrange a return and full refund \u2014 no questions asked.",
+  },
+  {
+    q: "How does escrow payment work?",
+    a: "When you purchase a part, your payment is held securely in escrow. The seller only receives payment after you confirm the part arrived and fits your vehicle. This protects you from fraud and defective parts.",
+  },
+  {
+    q: "Do you ship nationwide?",
+    a: "Yes. Our network of 250,000+ partner yards spans all 50 states. Most parts ship within 24 hours and arrive in 3\u20135 business days. Expedited shipping is available.",
+  },
+  {
+    q: "Can mechanics use AutoMotor?",
+    a: "Absolutely. We have a dedicated mechanic partner program. Source parts for your customers through AutoMotor and earn $200\u2013$500 per engine job. You can even white-label quotes under your shop\u2019s name.",
+  },
+  {
+    q: "Is my payment information safe?",
+    a: "100%. All payments are processed through Stripe, a PCI Level 1 certified payment processor. Your card details never touch our servers.",
   },
 ];
 
@@ -147,6 +280,83 @@ const footerCols: { title: string; links: { label: string; href: string }[] }[] 
   },
 ];
 
+function StatsSection() {
+  const { ref, inView } = useInView(0.3);
+  const parts = useCountUp(250000, 2000, inView);
+  const savings = useCountUp(1400, 2000, inView);
+  const rating = useCountUp(49, 2000, inView);
+
+  const stats = [
+    { value: parts.toLocaleString() + "+", label: "Parts Sourced" },
+    { value: "90s", label: "Average Quote Time", static: true },
+    { value: "$" + savings.toLocaleString(), label: "Average Savings" },
+    { value: (rating / 10).toFixed(1) + "\u2605", label: "Customer Rating" },
+  ];
+
+  return (
+    <section ref={ref} className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-4">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="text-3xl sm:text-4xl font-semibold text-text-primary tracking-tight">
+                {s.value}
+              </p>
+              <p className="text-sm text-text-secondary mt-1">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = useCallback((i: number) => {
+    setOpenIndex((prev) => (prev === i ? null : i));
+  }, []);
+
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
+      <div className="max-w-3xl mx-auto">
+        <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">FAQ</p>
+        <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
+          Questions? We&rsquo;ve got answers.
+        </h2>
+        <div className="space-y-2">
+          {faqs.map((faq, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <div key={i} className="bg-panel rounded-xl border border-line">
+                <button
+                  onClick={() => toggle(i)}
+                  className="flex items-center justify-between w-full px-5 py-4 text-left"
+                >
+                  <span className="text-sm font-medium text-text-primary pr-4">{faq.q}</span>
+                  <ChevronDown
+                    size={16}
+                    className={`text-text-tertiary flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                <div className={`accordion-content ${isOpen ? "open" : ""}`}>
+                  <div className="accordion-inner">
+                    <p className="px-5 pb-4 text-sm text-text-secondary leading-relaxed">
+                      {faq.a}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   const router = useRouter();
 
@@ -159,13 +369,12 @@ export default function HomePage() {
       {/* Hero */}
       <section className="flex flex-col items-center justify-center min-h-[calc(100dvh-3.5rem)] lg:min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-0 text-center">
         <div className="w-full max-w-[680px] mx-auto">
-          {/* Social proof pill — wraps gracefully on small screens */}
           <div className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-3 py-1.5 rounded-full border border-line bg-panel text-[11px] sm:text-xs text-text-secondary mb-5 sm:mb-6 max-w-full">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
             <span>12,847 drivers</span>
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true">&middot;</span>
             <span>4.9 rating</span>
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true">&middot;</span>
             <span>$3.2M saved this year</span>
           </div>
           <h1 className="font-semibold text-3xl sm:text-4xl lg:text-6xl tracking-tight text-text-primary mb-3 sm:mb-4 text-balance">
@@ -182,7 +391,6 @@ export default function HomePage() {
             className="mb-4"
           />
 
-          {/* Suggestion chips — horizontal scroll on mobile, wrap on tablet+ */}
           <div className="-mx-4 sm:mx-0 px-4 sm:px-0 flex sm:flex-wrap gap-2 overflow-x-auto no-scrollbar pb-1 justify-start sm:justify-center">
             {suggestionChips.map((chip) => (
               <button
@@ -197,7 +405,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section A — Video */}
+      {/* Video */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <div className="bg-panel rounded-xl border border-line overflow-hidden">
@@ -212,48 +420,75 @@ export default function HomePage() {
                 See AutoMotor call 15 yards in parallel
               </p>
               <p className="text-xs text-text-secondary mt-0.5">
-                Real recordings · 90 seconds end-to-end
+                Real recordings &middot; 90 seconds end-to-end
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section B — How it works */}
+      {/* Stats */}
+      <StatsSection />
+
+      {/* How it works */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">How it works</p>
           <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
             From problem to quote in under two minutes.
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-line rounded-xl overflow-hidden border border-line">
-            {steps.map((step, i) => (
-              <div
-                key={i}
-                className="bg-panel p-6"
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-xs font-mono text-text-tertiary">0{i + 1}</span>
-                  <step.icon size={14} className="text-orange-DEFAULT" aria-hidden="true" />
+          <div className="relative">
+            <div className="hidden md:block absolute top-8 left-[calc(16.66%+20px)] right-[calc(16.66%+20px)] h-px bg-line" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+              {steps.map((step, i) => (
+                <div key={i} className="relative">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-8 h-8 rounded-full border border-orange-DEFAULT flex items-center justify-center text-xs font-mono text-orange-DEFAULT flex-shrink-0">
+                      0{i + 1}
+                    </span>
+                    <step.icon size={16} className="text-orange-DEFAULT" aria-hidden="true" />
+                  </div>
+                  <h3 className="font-medium text-text-primary mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-text-secondary leading-relaxed mb-3">
+                    {step.desc}
+                  </p>
+                  <p className="text-xs text-text-tertiary">
+                    {step.detail}
+                  </p>
                 </div>
-                <h3 className="font-medium text-text-primary mb-1.5">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-text-secondary leading-relaxed">
-                  {step.desc}
-                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature highlights */}
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Platform</p>
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
+            Built different. Built for drivers.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {features.map((f) => (
+              <div key={f.title} className="bg-panel rounded-xl border border-line p-6">
+                <f.icon size={18} className="text-orange-DEFAULT mb-4" aria-hidden="true" />
+                <h3 className="font-medium text-text-primary mb-1.5">{f.title}</h3>
+                <p className="text-sm text-text-secondary leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Section C — Category cards */}
+      {/* Category cards */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Coverage</p>
           <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
-            Engines, transmissions, and parts — every category.
+            Engines, transmissions, and parts &mdash; every category.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {categoryCards.map((card) => (
@@ -280,7 +515,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section D — Trust badges */}
+      {/* Trust badges */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Why drivers trust us</p>
@@ -303,7 +538,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section E — Testimonials */}
+      {/* Comparison */}
+      <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Why AutoMotor</p>
+          <h2 className="font-semibold text-2xl sm:text-3xl tracking-tight text-text-primary text-center mb-12">
+            The old way vs. the AutoMotor way.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="bg-panel rounded-xl border border-line p-6">
+              <p className="text-xs uppercase tracking-wider text-text-tertiary mb-5">The old way</p>
+              <ul className="space-y-3.5">
+                {comparisonOld.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <X size={14} className="text-red-500/70 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                    <span className="text-sm text-text-secondary">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-panel rounded-xl border border-orange-DEFAULT/30 p-6">
+              <p className="text-xs uppercase tracking-wider text-orange-DEFAULT mb-5">The AutoMotor way</p>
+              <ul className="space-y-3.5">
+                {comparisonNew.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <CheckCircle size={14} className="text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                    <span className="text-sm text-text-primary">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-text-tertiary text-center mb-3">Customers</p>
@@ -333,7 +602,7 @@ export default function HomePage() {
                   <p className="text-sm font-medium text-text-primary">
                     {t.name}
                   </p>
-                  <p className="text-xs text-text-secondary mt-0.5">{t.location} · {t.vehicle}</p>
+                  <p className="text-xs text-text-secondary mt-0.5">{t.location} &middot; {t.vehicle}</p>
                 </div>
               </div>
             ))}
@@ -341,7 +610,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section F — For mechanics and junkyards */}
+      {/* For mechanics and junkyards */}
       <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 border-t border-line">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-panel rounded-xl border border-line p-6">
@@ -350,7 +619,7 @@ export default function HomePage() {
               For mechanics
             </h3>
             <p className="text-sm text-text-secondary mb-5 leading-relaxed">
-              Earn $200–$500 per engine job by sourcing parts through AutoMotor.
+              Earn $200&ndash;$500 per engine job by sourcing parts through AutoMotor.
               White-label quotes under your shop&apos;s name.
             </p>
             <Link
@@ -379,7 +648,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section G — Final CTA */}
+      {/* FAQ */}
+      <FAQSection />
+
+      {/* Final CTA */}
       <section className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 border-t border-line">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="font-semibold text-3xl sm:text-4xl tracking-tight text-text-primary mb-4">
@@ -424,7 +696,7 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-8 border-t border-line">
             <p className="text-xs text-text-tertiary">
-              © 2025 AutoMotor.AI · Austin, TX
+              &copy; 2025 AutoMotor.AI &middot; Austin, TX
             </p>
             <div className="flex items-center gap-5">
               {["X", "Instagram", "YouTube"].map((s) => (
